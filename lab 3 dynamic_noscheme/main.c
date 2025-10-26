@@ -1,5 +1,5 @@
-//Să se determine suma elementelor negative din
-//fiecare linie și media elementului maximal și cel minimal.     Tablou bidimens.
+//Să se determine suma elementelor negative din fiecare linie și
+//media aritmetica elementului maximal și cel minimal.     Tablou bidimens.
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -56,14 +56,12 @@ int main() {
 
     int **T = (int **)malloc(i_T * sizeof(int *));   //(int **)?     T for Table
 
-    int a = 0;
     for (i = 0; i < i_T; i++)
     {
         T[i] = (int *)malloc(j_T * sizeof(int));    //(int *)?
         for (j = 0; j < j_T; j++)
         {
-            scanf(" %d", &a);
-            T[i][j] = a;
+            scanf(" %d", &T[i][j]);
         }
     }       //*(*(arr + row) + col)     samen|| T [i][j] || *(*(T + i) + j)
     //*(arr + row) same arr[row]
