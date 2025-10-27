@@ -100,15 +100,18 @@ int main() {
  printf ("Alegeti: pentru metoda 1 tastati 1, pentru cealalta 2: ");
  scanf ("%d", &a);
 
- if (a == 1) complete_keyboard(T);
- else if (a == 2) complete_pseudo_random(T);
- else printf ("Ati introdus numarul gresit");
+ if (a == 1) {
+     complete_keyboard(T);
+     ColumsElements_Bubblesort(T);
+     Test_print(T);
+ }
+ else if (a == 2) {
+     complete_pseudo_random(T);
+     ColumsElements_Bubblesort(T);
+     Test_print(T);
+ }
+ else printf ("Error");
 
- ColumsElements_Bubblesort(T);
-
- Test_print(T);
-
- //
 
  for (i = 0; i < i_T; i++) free(T[i]);
     free(T);    //free memory
