@@ -77,45 +77,76 @@ void ColumsElements_Bubblesort (int **Table){
 }
 
 int main() {
+    printf ("1. Alocarea dinamică a memoriei pentru tablourile bidimensionale\n2. Introducerea elementelor tabloului de la tastatură\n3. Completarea tabloului cu valori aleatorii\n4. Să se sorteze coloanele tabloului în ordine descendentă cu ajutorul metodei “bulelor”\n5. Afișarea elementelor tabloului la ecran\n6. Eliberarea memoriei alocate pentru tablou\n0. Ieșire din program\n");
 
- printf ("Numarul de randuri: ");
- scanf ("%d", &i_T);
+    char a = 'p';
+    int f_allocated = 0, f_input = 0, f_exit = 0;
 
- printf ("Numarul de coloane: ");
- scanf ("%d", &j_T);
+    while (!f_exit) {
+        switch (a) {
+            case '1':
+                f_allocated = 1;
+                printf ("Numarul de randuri: ");
+                scanf ("%d", &i_T);
 
- int **T = (int **)malloc(i_T * sizeof(int *));   //(int **)?     T for Table
-    //double pointer, array of pointers
+                printf ("Numarul de coloane: ");
+                scanf ("%d", &j_T);
 
- for (i = 0; i < i_T; i++)
-    {
-     T[i] = (int *)malloc(j_T * sizeof(int));    //(int *)?
- }
-         //*(*(arr + row) + col)     samen|| T [i][j] || *(*(T + i) + j)
-         //*(arr + row) same arr[row]
+                int **T = (int **)malloc(i_T * sizeof(int *));   //(int **)?     T for Table    double pointer, array of pointers
+                for (i = 0; i < i_T; i++) T[i] = (int *)malloc(j_T * sizeof(int));
 
- int a = 0;
- printf ("Metoda 1. Introducerea elementelor tabloului de la tastatură\n");
- printf ("Metoda 2. Completarea tabloului cu valori aleatorii\n");
- printf ("Alegeti: pentru metoda 1 tastati 1, pentru cealalta 2: ");
- scanf ("%d", &a);
+                a = 'p';
+                break;
 
- if (a == 1) {
-     complete_keyboard(T);
-     ColumsElements_Bubblesort(T);
-     Test_print(T);
- }
- else if (a == 2) {
-     complete_pseudo_random(T);
-     ColumsElements_Bubblesort(T);
-     Test_print(T);
- }
- else printf ("Error");
+            case '2':
+                if (f_allocated) {
+                    complete_keyboard(T); f_input = 1;}
+                else printf("This step was not executed\n");
+                a = 'p';
+                break;
 
+            case '3':
+                if (f_allocated) {
+                    complete_pseudo_random(T); f_input = 1;}
+                else printf("This step was not executed\n");
+                a = 'p';
+                break;
 
- for (i = 0; i < i_T; i++) free(T[i]);
-    free(T);    //free memory
-    T = NULL;   //ocistka adresa, nevalidnosti
+            case '4':
+                if (f_input)
+                    ColumsElements_Bubblesort(T);
+                else printf("This step was not executed\n");
+                a = 'p';
+                break;
+
+            case '5':
+                if (f_input)
+                    Test_print(T);
+                else printf("This step was not executed\n");
+                a = 'p';
+                break;
+
+            case '6':
+                if(f_allocated) {
+                    for (i = 0; i < i_T; i++) free(T[i]);
+                    free(T);
+                    T = NULL;
+                    printf("memory is no more allocated\n");
+                    f_allocated = 0; f_input = 0;}
+                else printf("This step was not executed\n");
+                a = 'p';
+                break;
+
+            case '0':
+                f_exit = 1;
+                break;
+
+            default:
+                printf ("Alegeti conform meniului: alocare-1, keyboard-2, pseudo-3, sort-4 , print-5, free-6, exit-0: ");
+                scanf (" %c", &a);
+        }
+
+    }
 
  return 0;
 }
