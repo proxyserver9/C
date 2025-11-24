@@ -278,18 +278,16 @@ void newElemEnd() {
     int iForTable_movies = 0;
     Num_Movies++;
     movies = realloc(movies,sizeof(Movie)*(Num_Movies));
-    printf("new1");
     printf("input for new appended movie:\n");
+
     if (iForTable_movies ==0) {
         input(&movies[Num_Movies-1].name);
         iForTable_movies++;
     }
-    printf("new2");
     if (iForTable_movies == 1) {
         input(&movies[Num_Movies-1].country);
         iForTable_movies++;
     }
-    printf("new3");
     if (iForTable_movies == 2) {
         input(&movies[Num_Movies-1].director);
         iForTable_movies++;
@@ -302,7 +300,19 @@ void newElemEnd() {
         scanf("%d", &movies[Num_Movies-1].year);
         getchar();
     }
-    printf("new3");
+}
+
+void sortbyName() {
+    for (int i = 0; i < Num_Movies - 1; i++) {
+        for (int j = i + 1; j < Num_Movies; j++) {
+
+            if (strcmp(movies[i].name, movies[j].name) > 0) {
+                Movie Temp = movies[i];
+                movies[i] = movies[j];
+                movies[j] = Temp;
+            }
+        }
+    }
 }
 
 void freetableMovies() {
@@ -356,8 +366,8 @@ int main() {
             break;
 
         case 52:    //4 - sort by name alphabetic order
-            if(f_allocated && !f_completed) {
-                printf("poshol nahui");
+            if(f_completed) {
+                sortbyName();
             }
             else printf("This step was not executed.\n");
             default_block();
