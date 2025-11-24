@@ -42,13 +42,13 @@ void allocation (Movie **array) {
 }   // 1
 
 void input (char **array) {
-    char c;
+    char cc;
     int length = 0;
     int capacity = 16;
 
     *array = malloc(sizeof(char) * capacity);
-
-    while ( (c = getchar()) != '\n'){
+    jump:
+    while ( (cc = getchar()) != '\n'){
         if (length + 1 >= capacity){
             capacity++;
             *array = realloc(*array, capacity*sizeof(char));
@@ -56,10 +56,11 @@ void input (char **array) {
                 break;
             }
         }
-        (*array)[length++] = c; // derefentierea
+        (*array)[length++] = cc; // derefentierea
     }
-    (*array)[length] = '\0';
-}    //citeste pana la '\n' de la tastatura
+    if (length != 0)(*array)[length] = '\0';
+    else if (length == 0) goto jump;
+}//citeste pana la '\n' de la tastatura
 
 void input_file(char **array, FILE *ptr) {
     char c;
@@ -159,16 +160,58 @@ void output_file(){
     }
     fclose(fp);
 }
+
+int elemEdit(int i) {
+    int iForTable_movies = 0;
+    int f_error = 1;
+
+    free(movies[i].name);
+    movies[i].name = NULL;
+    free(movies[i].country);
+    movies[i].country = NULL;
+    free(movies[i].director);
+    movies[i].director = NULL;
+    free(movies[i].genre);
+    movies[i].genre = NULL;
+
+    while (f_error) {
+        printf("input for movie %d:\n",i+1);
+        if (iForTable_movies ==0) {
+            input(&movies[i].name);
+            if (movies[i].name != NULL) f_error = 0;
+            iForTable_movies++;
+        }
+        if (iForTable_movies == 1) {
+            input(&movies[i].country);
+            if (movies[i].country != NULL) f_error = 0;
+            iForTable_movies++;
+        }
+        if (iForTable_movies == 2) {
+            input(&movies[i].director);
+            if (movies[i].director != NULL) f_error = 0;
+            iForTable_movies++;
+        }
+        if (iForTable_movies == 3) {
+            input(&movies[i].genre);
+            if (movies[i].genre != NULL) f_error = 0;
+            iForTable_movies++;
+        }
+        if (iForTable_movies == 4) {
+            scanf("%d", &movies[i].year);
+            getchar();
+        }
+    }
+}
+
 char *nameverify;
 int find(){
-    //printf("1");
     int f_found = 0;
     if (nameverify != NULL) {
         free(nameverify);
         nameverify = NULL;
     }
     int movieindex = -1;
-    printf("introduceti nume film pentru stergere");
+    printf("introduceti nume filmului cautat: ");
     input(&nameverify);
     for(int i = 0; i < Num_Movies; i++) {
         if (strlen(nameverify) == strlen(movies[i].name)) {
@@ -188,7 +231,6 @@ int find(){
 }
 
 Movie *temp;
-
 void TempCopying (int i) {
     temp[i].name = movies[i].name;
     temp[i].country = movies[i].country;
@@ -225,6 +267,52 @@ void  deletebyName() {
         }
     }
     temp = NULL;
+    if (Num_Movies == 0) {
+        free(movies);
+        movies = NULL;
+        f_completed = 0;
+    }
+}
+
+void newElemEnd() {
+    int iForTable_movies = 0;
+    Num_Movies++;
+    movies = realloc(movies,sizeof(Movie)*(Num_Movies));
+    printf("new1");
+    printf("input for new appended movie:\n");
+    if (iForTable_movies ==0) {
+        input(&movies[Num_Movies-1].name);
+        iForTable_movies++;
+    }
+    printf("new2");
+    if (iForTable_movies == 1) {
+        input(&movies[Num_Movies-1].country);
+        iForTable_movies++;
+    }
+    printf("new3");
+    if (iForTable_movies == 2) {
+        input(&movies[Num_Movies-1].director);
+        iForTable_movies++;
+    }
+    if (iForTable_movies == 3) {
+        input(&movies[Num_Movies-1].genre);
+        iForTable_movies++;
+    }
+    if (iForTable_movies == 4) {
+        scanf("%d", &movies[Num_Movies-1].year);
+        getchar();
+    }
+    printf("new3");
+}
+
+void freetableMovies() {
+    if (movies == NULL) return;
+    movies = realloc(movies, Num_Movies*sizeof(Movie));
+    free(movies);
+    movies = NULL;
+    Num_Movies = 0;
+    f_completed = 0;
+    f_allocated = 0;
 }
 
 void default_block() {
@@ -248,9 +336,47 @@ int main() {
             default_block();
             break;
 
-        case 50:    //2 - completare keyboard
+        case 50:    //2 - complete keyboard
             if(f_allocated && !f_completed) {
                 complete_keyboard();
+            }
+            else printf ("This step was not executed.\n");
+            default_block();
+            break;
+
+        case 51:    //3 - search elem (&output on screen)
+            if(f_completed) {
+                int index = find();
+                if (index > -1) {
+                    printf("%d. %s, %s, %s, %s, %d\n", index + 1, movies[index].name, movies[index].country, movies[index].director, movies[index].genre, movies[index].year);
+                }
+            }
+            else printf("This step was not executed.\n");
+            default_block();
+            break;
+
+        case 52:    //4 - sort by name alphabetic order
+            if(f_allocated && !f_completed) {
+                printf("poshol nahui");
+            }
+            else printf("This step was not executed.\n");
+            default_block();
+            break;
+
+        case 53:    //5 - edit elem
+            if(f_completed) {
+                int index = find();
+                if (index > -1) {
+                    elemEdit(index);
+                }
+            }
+            else printf("This step was not executed.\n");
+            default_block();
+            break;
+
+        case 54:    //6 - +new elem at the end
+            if(f_completed) {
+                newElemEnd();
             }
             else printf("This step was not executed.\n");
             default_block();
@@ -259,6 +385,14 @@ int main() {
         case 55:    //7 - delete by name
             if (f_completed) {
                 deletebyName();
+            }
+            else printf("This step was not executed.\n");
+            default_block();
+            break;
+
+        case 56:    //8 - new elem insertion
+            if (f_completed) {
+                printf("poshol nahui3");
             }
             else printf("This step was not executed.\n");
             default_block();
@@ -283,15 +417,18 @@ int main() {
             break;
 
         case 4949:  //11 - output on screen
-            if(f_allocated) {
+            if(f_completed) {
                 output_screen();
             }
             else printf("This step was not executed.\n");
             default_block();
             break;
 
-        case 4950:  //12 -
-            printf("Case for 12\n");
+        case 4950:  //12 - free struct table
+            if (f_allocated) {
+                freetableMovies();
+            }
+            else printf("This step was not executed.\n");
             default_block();
             break;
 
