@@ -274,6 +274,47 @@ void  deletebyName() {
     }
 }
 
+void newElemInsert() {
+    int index = 0;
+    printf("introduceti indexul insertiei: ");
+    scanf("%d",&index);
+    getchar();
+
+    if (index < Num_Movies) {
+        Num_Movies++;
+        temp = malloc(sizeof(Movie)*(Num_Movies));
+
+        for (int ii = 0; ii < index; ii++) {
+            TempCopying(ii);
+        }
+
+        for (int i = index+1; i < Num_Movies; i++) {
+            temp[i].name = movies[i-1].name;
+            temp[i].country = movies[i-1].country;
+            temp[i].director = movies[i-1].director;
+            temp[i].genre = movies[i-1].genre;
+            temp[i].year = movies[i-1].year;
+        }
+
+        movies = realloc(movies, Num_Movies*sizeof(Movie));
+        for (int ii = 0; ii < Num_Movies; ii++) {
+            if (ii == index) {
+                printf("input for new inserted movie:\n");
+                input(&movies[index].name);
+                input(&movies[index].country);
+                input(&movies[index].director);
+                input(&movies[index].genre);
+                scanf("%d",&movies[index].year);
+                getchar();
+            }
+            else MovieCopying(ii);
+        }
+
+        temp = NULL;
+    }
+    else printf("insertie nereusita\n");
+}
+
 void newElemEnd() {
     int iForTable_movies = 0;
     Num_Movies++;
@@ -402,7 +443,7 @@ int main() {
 
         case 56:    //8 - new elem insertion
             if (f_completed) {
-                printf("poshol nahui3");
+                newElemInsert();
             }
             else printf("This step was not executed.\n");
             default_block();
