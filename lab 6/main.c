@@ -154,7 +154,7 @@ void output_screen(){
 
 void output_file(){
     FILE *fp;
-    fp = fopen("output.txt", "w");
+    fp = fopen("C:\\Users\\Daria Ro\\Desktop\\repositories\\C\\lab 6\\output.txt", "w");
     for(int i = 0; i < Num_Movies; i++){
         fprintf(fp,"%d. %s, %s, %s, %s, %d\n", i + 1, movies[i].name, movies[i].country, movies[i].director, movies[i].genre, movies[i].year);
     }
